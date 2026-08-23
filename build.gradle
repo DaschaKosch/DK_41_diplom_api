@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.12.0'  // или актуальная версия
+    id 'io.freefair.lombok' version '9.5.0'
+}
+def restAssuredVersion = "6.0.0",
+    selenideVersion = "7.13.0",
+    allureVersion = "2.32.0",
+    junitVersion = "5.14.3",
+    slf4jVersion = "2.0.17"
+
+allure {
+    report {
+        version.set(allureVersion)
+    }
+    adapter { // отвечает за появление папочки build/allure-results
+        aspectjWeaver.set(true) //обработка аннотации @Step
+        frameworks {
+            junit5 { //название фреймворка
+                adapterVersion.set(allureVersion) //версия интеграции фреймворка и Allure
+            }
+        }
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform("org.junit:junit-bom:5.14.2")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'commons-io:commons-io:2.15.0'
+    testImplementation 'com.codeborne:pdf-test:1.5.0'
+    testImplementation 'com.codeborne:xls-test:1.4.3'
+    testImplementation 'com.opencsv:opencsv:5.9'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation 'com.codeborne:selenide:7.14.0'
+    testImplementation 'net.datafaker:datafaker:2.5.4'
+    testImplementation 'io.rest-assured:rest-assured:6.0.0'
+    testImplementation 'io.rest-assured:json-schema-validator:6.0.0'
+    testImplementation 'tools.jackson.core:jackson-databind:3.1.4'
+    testImplementation 'org.assertj:assertj-core:3.27.7'
+
+
+    // Allure зависимости
+    testImplementation 'io.qameta.allure:allure-selenide:2.23.0'
+    testImplementation 'io.qameta.allure:allure-junit5:2.23.0'
+    testImplementation 'org.aspectj:aspectjweaver:1.9.21'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.32.0'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperties(System.getProperties()) //вынос параметров
+    systemProperty 'allure.results.directory', file('build/allure-results')
+    jvmArgs = [
+            "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains('aspectjweaver') }.absolutePath}"
+    ]
+    jvmArgs += ['-Dfile.encoding=UTF-8']
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
