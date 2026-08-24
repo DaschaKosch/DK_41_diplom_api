@@ -56,8 +56,7 @@
 
 ## <span style="color: #1BA8A8;">✅</span> Команда для запуска из терминала
 ```bash
-./gradlew clean test
-</p>  
+./gradlew clean test 
 ```
 
 ## <img alt="Allure" height="25" src="images/logo/Allure.svg" width="25"/></a>  <a name="Allure"></a>Allure Report	</a>
