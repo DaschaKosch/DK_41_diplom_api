@@ -15,8 +15,9 @@ public class RegistrationTests extends TestBase {
         @Test
         public void successfulRegistrationTest() {
 
-            RegistrationBodyModel body = new RegistrationBodyModel(td.username, td.password);
-            SuccessfulRegistrationResponseModel response = api.registration.registerUser(body);
+            SuccessfulRegistrationResponseModel response = api.registration.registerUser(
+                    new RegistrationBodyModel(td.username, td.password)
+            );
 
             step("Проверка бизнес-логики: валидация данных зарегистрированного пользователя", () -> {
                 assertThat(response.username()).isEqualTo(td.username);
@@ -49,8 +50,9 @@ public class RegistrationTests extends TestBase {
         @Test
         public void emptyUsernameRegistrationTest() {
 
-            RegistrationBodyModel body = new RegistrationBodyModel("", td.password);
-            EmptyUsernameResponseModel response = api.registration.registerWithEmptyUsername(body);
+            EmptyUsernameResponseModel response = api.registration.registerWithEmptyUsername(
+                    new RegistrationBodyModel("", td.password)
+            );
 
         step("Проверка бизнес-логики: валидация ошибки пустого логина", () -> {
             assertThat(response.username().get(0)).isEqualTo(EXPECTED_ERROR_NOT_BE_BLANK);
@@ -61,9 +63,9 @@ public class RegistrationTests extends TestBase {
     @Test
     public void emptyPasswordRegistrationTest() {
 
-        RegistrationBodyModel body = new RegistrationBodyModel(td.username, "");
-        EmptyPasswordResponseModel response = api.registration.registerWithEmptyPassword(body);
-
+        EmptyPasswordResponseModel response = api.registration.registerWithEmptyPassword(
+                new RegistrationBodyModel(td.username, "")
+        );
         step("Проверка бизнес-логики: валидация ошибки пустого пароля", () -> {
             assertThat(response.password().get(0)).isEqualTo(EXPECTED_ERROR_NOT_BE_BLANK);
         });
@@ -73,8 +75,9 @@ public class RegistrationTests extends TestBase {
     @Test
     public void wrongUsernameRegistrationTest() {
 
-        RegistrationBodyModel body = new RegistrationBodyModel(td.wrongUsername, td.password);
-        WrongUsernameResponseModel response = api.registration.registerWithWrongUsername(body);
+        WrongUsernameResponseModel response = api.registration.registerWithWrongUsername(
+                new RegistrationBodyModel(td.wrongUsername, td.password)
+        );
 
         step("Проверка бизнес-логики: валидация ошибки некорректного логина", () -> {
             assertThat(response.username().get(0)).isEqualTo(EXPECTED_ERROR_INVALID_USERNAME_CHARACTERS);
@@ -85,8 +88,9 @@ public class RegistrationTests extends TestBase {
     @Test
     public void unsupportedMediaTypeRegistrationTest() {
 
-        RegistrationBodyModel body = new RegistrationBodyModel(td.username, td.password);
-        UnsupportedMediaTypeRegistrationBodyModel response = api.registration.registerWithUnsupportedMediaType(body);
+        UnsupportedMediaTypeRegistrationBodyModel response = api.registration.registerWithUnsupportedMediaType(
+                new RegistrationBodyModel(td.username, td.password)
+        );
 
         step("Проверка бизнес-логики: валидация ошибки неверного Content-Type", () -> {
             assertThat(response.detail()).isEqualTo(EXPECTED_ERROR_UNSUPPORTED_MEDIA_TYPE);

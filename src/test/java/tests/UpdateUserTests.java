@@ -18,17 +18,13 @@ public class UpdateUserTests extends TestBase {
     @Test
     public void successfulPutUpdateUserTest() {
 
-        RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-        api.registration.registerUser(regBody);
+        api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
+        String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
-        LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-        String accessToken = api.login.login(loginBody).access();
-
-        UpdateUserBodyModel body = new UpdateUserBodyModel(
-                td.username, td.firstName, td.lastName, td.email
+        SuccessfulUpdateUserPutResponseModel response = api.updateUser.updateUserWithPut(
+                accessToken,
+                new UpdateUserBodyModel(td.username, td.firstName, td.lastName, td.email)
         );
-
-        SuccessfulUpdateUserPutResponseModel response = api.updateUser.updateUserWithPut(accessToken, body);
 
         step("Проверка бизнес-логики: валидация обновленных данных пользователя", () -> {
             assertThat(response.id()).isPositive();
@@ -44,17 +40,13 @@ public class UpdateUserTests extends TestBase {
     @Test
     public void successfulPatchUpdateUserTest() {
 
-        RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-        api.registration.registerUser(regBody);
+        api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
+        String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
-        LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-        String accessToken = api.login.login(loginBody).access();
-
-        UpdateUserBodyModel body = new UpdateUserBodyModel(
-                td.username, td.firstName, td.lastName, td.email
+        SuccessfulUpdateUserPatchResponseModel response = api.updateUser.updateUserWithPatch(
+                accessToken,
+                new UpdateUserBodyModel(td.username, td.firstName, td.lastName, td.email)
         );
-        SuccessfulUpdateUserPatchResponseModel response = api.updateUser.updateUserWithPatch(accessToken, body);
-
 
         step("Проверка бизнес-логики: валидация обновленных данных пользователя", () -> {
             assertThat(response.id()).isPositive();
@@ -69,13 +61,13 @@ public class UpdateUserTests extends TestBase {
     @Test
     public void successfulPartialPatchUpdateUserTest() {
 
-        RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-        api.registration.registerUser(regBody);
-        LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-        String accessToken = api.login.login(loginBody).access();
-        PartialUpdateUserBodyModel body = new PartialUpdateUserBodyModel(td.username);
-        SuccessfulUpdateUserPatchResponseModel response = api.updateUser.partialUpdateUser(accessToken, body);
+        api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
+        String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
+        SuccessfulUpdateUserPatchResponseModel response = api.updateUser.partialUpdateUser(
+                accessToken,
+                new PartialUpdateUserBodyModel(td.username)
+        );
 
         step("Проверка бизнес-логики: валидация частичного обновления данных", () -> {
             assertThat(response.id()).isPositive();
@@ -87,16 +79,13 @@ public class UpdateUserTests extends TestBase {
     @Test
     public void partialPutUpdateUserTest() {
 
-        RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-        api.registration.registerUser(regBody);
+        api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
+        String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
-        LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-        String accessToken = api.login.login(loginBody).access();
-
-        PartialUpdateUserBodyModel body = new PartialUpdateUserBodyModel(td.username);
-
-        InvalidPartialUpdateUserResponseBodyModel response = api.updateUser.partialUpdateWithPut(accessToken, body);
-
+        InvalidPartialUpdateUserResponseBodyModel response = api.updateUser.partialUpdateWithPut(
+                accessToken,
+                new PartialUpdateUserBodyModel(td.username)
+        );
 
         step("Проверка бизнес-логики: валидация текста ошибок валидации полей", () -> {
             assertThat(response.firstName().get(0)).isEqualTo(EXPECTED_REQUIRED_FIELD);

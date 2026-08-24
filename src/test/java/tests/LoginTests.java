@@ -16,11 +16,10 @@ public class LoginTests extends TestBase {
     @Test
     public void successfulLoginTest() {
 
-        RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-        api.registration.registerUser(regBody);
-
-        LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-        SuccessfulLoginResponseRecordsModel response = api.login.login(loginBody);
+        api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
+        SuccessfulLoginResponseRecordsModel response = api.login.login(
+                new LoginBodyRecordsModel(td.username, td.password)
+        );
 
         step("Проверка бизнес-логики: валидация access и refresh токенов", () -> {
             String expectedTokenPath = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
@@ -36,9 +35,9 @@ public class LoginTests extends TestBase {
     @Test
     public void wrongCredentialsLoginTest() {
 
-        LoginBodyRecordsModel body = new LoginBodyRecordsModel(td.username, td.wrongPassword);
-        WrongCredentialsLoginResponseRecordsModel response = api.login.loginWithWrongPassword(body);
-
+        WrongCredentialsLoginResponseRecordsModel response = api.login.loginWithWrongPassword(
+                new LoginBodyRecordsModel(td.username, td.wrongPassword)
+        );
         step("Проверка бизнес-логики: валидация ошибки неверных учетных данных", () -> {
             assertThat(response.detail()).isEqualTo(EXPECTED_ERROR_INVALID_USERNAME_OR_PASSWORD);
         });
@@ -48,8 +47,9 @@ public class LoginTests extends TestBase {
     @Test
     public void emptyRefreshTokenLoginTest() {
 
-        EmptyRefreshTokenLoginBodyModel body = new EmptyRefreshTokenLoginBodyModel();
-        EmptyRefreshTokenLoginResponseModel response = api.login.refreshWithoutToken(body);
+        EmptyRefreshTokenLoginResponseModel response = api.login.refreshWithoutToken(
+                new EmptyRefreshTokenLoginBodyModel()
+        );
 
         step("Проверка бизнес-логики: валидация ошибки отсутствия refresh-токена", () -> {
             assertThat(response.refresh().get(0)).isEqualTo(EXPECTED_REQUIRED_FIELD);
@@ -60,8 +60,9 @@ public class LoginTests extends TestBase {
     @Test
     public void wrongRefreshTokenLoginTest() {
 
-        WrongRefreshTokenLoginBodyModel body = new WrongRefreshTokenLoginBodyModel(td.invalidToken);
-        WrongRefreshTokenLoginResponseModel response = api.login.refreshWithInvalidToken(body);
+        WrongRefreshTokenLoginResponseModel response = api.login.refreshWithInvalidToken(
+                new WrongRefreshTokenLoginBodyModel(td.invalidToken)
+        );
 
         step("Проверка бизнес-логики: валидация ошибки невалидного refresh-токена", () -> {
             assertThat(response.detail()).isEqualTo(EXPECTED_ERROR_VALID_TOKEN);

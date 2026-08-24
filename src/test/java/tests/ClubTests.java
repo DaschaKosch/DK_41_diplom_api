@@ -18,20 +18,15 @@ public class ClubTests extends TestBase {
         @Test
         public void successfulCreateClubTest() {
 
-            RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-            LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-
-            String accessToken = api.login.registerAndLogin(regBody, loginBody);
-
-            ClubRequestModel request = new ClubRequestModel(
-                    td.bookTitle,
-                    td.bookAuthors,
-                    td.publicationYear,
-                    td.description,
-                    td.telegramChatLink
+            String accessToken = api.login.registerAndLogin(
+                    new RegistrationBodyModel(td.username, td.password),
+                    new LoginBodyRecordsModel(td.username, td.password)
             );
 
-            ClubResponseModel response = api.club.createClub(request, accessToken);
+            ClubResponseModel response = api.club.createClub(
+                    new ClubRequestModel(td.bookTitle, td.bookAuthors, td.publicationYear, td.description, td.telegramChatLink),
+                    accessToken
+            );
 
             step("Проверка бизнес-логики: валидация данных созданного клуба", () -> {
                 assertThat(response.id()).isPositive();
@@ -52,18 +47,14 @@ public class ClubTests extends TestBase {
         @Test
         public void getClubByIdTest() {
 
-            RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-            api.registration.registerUser(regBody);
+            api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
 
-            LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-            String accessToken = api.login.login(loginBody).access();
+            String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
-            ClubRequestModel createBody = new ClubRequestModel(
-                    td.bookTitle, td.bookAuthors, td.publicationYear,
-                    td.description, td.telegramChatLink
+            ClubResponseModel createdClub = api.club.createClub(
+                    new ClubRequestModel(td.bookTitle, td.bookAuthors, td.publicationYear, td.description, td.telegramChatLink),
+                    accessToken
             );
-
-            ClubResponseModel createdClub = api.club.createClub(createBody, accessToken);
             int clubId = createdClub.id();
 
             ClubResponseModel retrievedClub = api.club.getClubById(clubId, accessToken);
@@ -85,25 +76,21 @@ public class ClubTests extends TestBase {
         @Test
         public void successfulUpdateClubTest() {
 
-            RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-            api.registration.registerUser(regBody);
+            api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
 
-            LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-            String accessToken = api.login.login(loginBody).access();
+            String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
-            ClubRequestModel createBody = new ClubRequestModel(
-                    td.bookTitle, td.bookAuthors, td.publicationYear,
-                    td.description, td.telegramChatLink
+            ClubResponseModel createdClub = api.club.createClub(
+                    new ClubRequestModel(td.bookTitle, td.bookAuthors, td.publicationYear, td.description, td.telegramChatLink),
+                    accessToken
             );
-            ClubResponseModel createdClub = api.club.createClub(createBody, accessToken);
             int clubId = createdClub.id();
 
-            ClubRequestModel updateBody = new ClubRequestModel(
-                    td.newBookTitle, td.newBookAuthors, td.publicationYear,
-                    td.description, td.telegramChatLink
+            ClubResponseModel updatedClub = api.club.updateClub(
+                    clubId,
+                    new ClubRequestModel(td.newBookTitle, td.newBookAuthors, td.publicationYear, td.description, td.telegramChatLink),
+                    accessToken
             );
-
-            ClubResponseModel updatedClub = api.club.updateClub(clubId, updateBody, accessToken);
 
             step("Проверка бизнес-логики: валидация обновлённых данных клуба", () -> {
                 assertThat(updatedClub.id()).isEqualTo(clubId);
@@ -121,22 +108,18 @@ public class ClubTests extends TestBase {
         @Test
         public void successfulDeleteClubTest() {
 
-            RegistrationBodyModel regBody = new RegistrationBodyModel(td.username, td.password);
-            api.registration.registerUser(regBody);
+            api.registration.registerUser(new RegistrationBodyModel(td.username, td.password));
 
-            LoginBodyRecordsModel loginBody = new LoginBodyRecordsModel(td.username, td.password);
-            String accessToken = api.login.login(loginBody).access();
+            String accessToken = api.login.login(new LoginBodyRecordsModel(td.username, td.password)).access();
 
-            ClubRequestModel createBody = new ClubRequestModel(
-                    td.bookTitle, td.bookAuthors, td.publicationYear,
-                    td.description, td.telegramChatLink
+            ClubResponseModel createdClub = api.club.createClub(
+                    new ClubRequestModel(td.bookTitle, td.bookAuthors, td.publicationYear, td.description, td.telegramChatLink),
+                    accessToken
             );
-            ClubResponseModel createdClub = api.club.createClub(createBody, accessToken);
             int clubId = createdClub.id();
 
             api.club.deleteClub(clubId, accessToken);
 
-            // Проверка удаления — это бизнес-логика, оборачиваем в step()
             step("Проверка бизнес-логики: клуб удалён и недоступен через GET", () -> {
                 int statusCode = given(clubRequestSpec)
                         .auth().oauth2(accessToken)
