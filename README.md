@@ -85,7 +85,7 @@
 </p>
 
 
-## <img alt="Allure_TO" height="25" src="images/logo/Allure_TO.svg" width="25"/> </a>Интеграция с Allure TestOps</a>
+## <img alt="Allure_TO" height="25" src="images/logo/Allure_TO.svg" width="25"/> <a href="https://allure.qa.guru/project/5363/launches" target="_blank" style="color: #1BA8A8; text-decoration: none;">Интеграция с Allure TestOps ↗</a>
 
 ## Allure TestOps Запуски
 
@@ -99,15 +99,11 @@
 <img title="Allure Graphics" src="images/screen/TestOps кейсы.png" width="850">   
 </p>
 
-## <img alt="Allure" height="25" src="images/logo/Jira.svg" width="25"/></a> Интеграция с <a target="_blank" href="https://jira.autotests.cloud/browse/HOMEWORK-689">Jira</a>
+## <img alt="Allure" height="25" src="images/logo/Jira.svg" width="25"/></a> Интеграция с <a target="_blank" href="https://jira.qa.guru/browse/MUL-39">Jira</a>
 
 <p align="center">  
 <img title="Jira" src="images/screen/Jira1.png" width="">  
 </p>
 
 ____
-## <img alt="Allure" height="25" src="images/logo/Telegram.svg" width="25"/></a> Уведомление в Telegram при помощи бота
-____
-<p align="center">  
-<img title="Allure Overview Dashboard" src="images/screen/Телега.png" width="550">  
-</p>
+
