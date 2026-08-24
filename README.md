@@ -59,7 +59,7 @@
 ./gradlew clean test 
 ```
 
-## <img alt="Allure" height="25" src="images/logo/Allure.svg" width="25"/></a>  <a name="Allure"></a>Allure Report	</a>
+## <img alt="Allure" height="25" src="images/logo/Allure.svg" width="25"/> <a href="https://jenkins.qa.guru/job/41_DK_API/2/allure/" target="_blank" style="color: #1BA8A8; text-decoration: none;">Allure Report ↗</a>
 
 
 ## Основная страница отчёта
