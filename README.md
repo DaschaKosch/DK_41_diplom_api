@@ -105,4 +105,8 @@
 </p>
 
 ____
-
+## <img alt="Allure" height="25" src="images/logo/Telegram.svg" width="25"/></a> Уведомление в Telegram при помощи бота
+____
+<p align="center">  
+<img title="Allure Overview Dashboard" src="images/screen/Screenshot_2026-08-25-20-02-30-947_org.telegram.messenger-edit.jpg" width="550">  
+</p>
